@@ -2,6 +2,8 @@ import pygame, sys
 from pygame.locals import *
 from Fighter import Fighter
 from EnemyFighter import EnemyFighter
+from FighterMissile import FighterMissile
+from EnemyFighterMissile import *
 from color import *
 
 class TopGun:
@@ -18,9 +20,9 @@ class TopGun:
         fighter_y = self.window_height - 20
 
         self.Fighter = Fighter(x = fighter_x, y = fighter_y, window_height = self.window_height, window_width = self.window_width)
-        self.EnemyFighters = []
+        self.EnemyFighters = EnemyFighter()
 
-        self.FighterMissile = []
+        self.FighterMissile = FighterMissile()
         self.EnemyFightersMissile = []
 
         pygame.init()
@@ -31,6 +33,7 @@ class TopGun:
     def start(self):
         running = True
         to_x = 0
+        index = 0
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
@@ -47,19 +50,19 @@ class TopGun:
                         to_x = 0
             self.Fighter.setDirection2(to_x)
 
+            self.FighterMissile.flyMissile()
+            self.FighterMissile.fireMissile(self.Fighter, index)
+
             # draw airplane, opponents and missiles into the Grid
             self.drawComponents()
             self.fps_clock.tick(self.fps)
+            index += 1
         return
 
     def drawComponents(self):
         self.display_grid.fill(BGCOLOR)
         self.Fighter.drawComponent(self.display_grid)
-        for EnemyFighter in self.EnemyFighters:
-            EnemyFighter.drawComponent(self.display_grid)
-
-        # for missile in self.FighterMissile:
-        #     missile.drawComponent(self.display_grid)
+        self.FighterMissile.drawComponent(self.display_grid)
         pygame.display.update()
     
     def checkFighterDead(self):

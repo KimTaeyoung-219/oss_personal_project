@@ -1,20 +1,15 @@
 from pygame.locals import *
 import pygame
-
-DARKGREEN = (  0, 155,   0)
-RED       = (255,   0,   0)
-WHITE     = (255, 255, 255)
-BLACK     = (  0,   0,   0)
-BLUE      = (  0,   0, 255)
+from color import *
 
 class Fighter:
-    def __init__(self, x = -1, y = -1, window_height = 640, window_width = 480):
+    def __init__(self, x = -1, y = -1, window_height = 640, window_width = 480, cell_size = 3):
         self.window_width = window_width
         self.window_height = window_height
         self.x = x
         self.y = y
-
-        self.cell_size = 3
+        self.cell_size = cell_size
+        self.fighterLength = 20
 
         if self.x == -1:
             self.x = self.window_width // 2
