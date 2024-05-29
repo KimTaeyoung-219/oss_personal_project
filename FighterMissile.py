@@ -4,11 +4,14 @@ import pygame
 from color import *
 
 class FighterMissile:
-    def __init__(self, fireMissilePerIndex = 5, missileLength = 6, cell_size = 3):
+    def __init__(self, fireMissilePerIndex = 5, missileLength = 6, cell_size = 3, window_height = 640, window_width = 480):
         self.missiles = []
         self.fireMissilePerIndex = fireMissilePerIndex
         self.missileLength = missileLength
-        self.cell_size = 3
+        self.cell_size = cell_size
+        self.window_height = window_height
+        self.window_width = window_width
+        self.MissileColor = BLUE
 
         return
     
@@ -35,6 +38,6 @@ class FighterMissile:
                 x = missile[0]
                 y = missile[1] - (self.cell_size * i)
                 rect = pygame.Rect(x, y, self.cell_size, self.cell_size)
-                pygame.draw.rect(grid, BLUE, rect)
+                pygame.draw.rect(grid, self.MissileColor, rect)
             continue
     
