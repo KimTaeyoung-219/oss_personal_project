@@ -8,6 +8,7 @@ class EnemyFighter:
         self.y = y
         self.window_height = window_height
         self.window_width = window_width
+        self.fighterLength = 21
 
         self.cell_size = cell_size
         if self.x == -1:

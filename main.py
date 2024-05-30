@@ -60,7 +60,7 @@ class TopGun:
 
             self.EnemyFighter.generateFighter()
             self.EnemyFightersMissile.flyMissile()
-            # self.EnemyFightersMissile.fireMissile(self.Fighter, index)
+            self.EnemyFightersMissile.fireMissile(self.EnemyFighter, index)
 
             # draw airplane, opponents and missiles into the Grid
             self.drawComponents()
@@ -73,6 +73,7 @@ class TopGun:
         self.Fighter.drawComponent(self.display_grid)
         self.FighterMissile.drawComponent(self.display_grid)
         self.EnemyFighter.drawComponent(self.display_grid)
+        self.EnemyFightersMissile.drawComponent(self.display_grid)
         pygame.display.update()
     
     def checkFighterDead(self):
@@ -81,10 +82,11 @@ class TopGun:
     def checkEnemyFighterDead(self):
         return
     
-    def theEnd(self):
+    def end(self):
         pygame.quit()
         sys.exit()
  
 if __name__ == "__main__":
     game = TopGun()
     game.start()
+    game.end()

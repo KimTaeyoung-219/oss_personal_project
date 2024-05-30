@@ -16,13 +16,14 @@ class EnemyFighterMissile:
 
         return
     
-    def fireMissile(self, fighter: EnemyFighter, index):
-        if index % self.fireMissilePerIndex == 0:
-            x = fighter.x
-            y = fighter.y + fighter.fighterLength * self.cell_size
+    def fireMissile(self, fighters: EnemyFighter, index):
+        for fighter in fighters.fighterList:
+            if index % self.fireMissilePerIndex == 0:
+                x = fighter[0]
+                y = fighter[1] + fighters.fighterLength * self.cell_size
 
-            missile = [x, y]
-            self.missiles.append(missile)
+                missile = [x, y]
+                self.missiles.append(missile)
         return
     
     def flyMissile(self):
@@ -37,8 +38,8 @@ class EnemyFighterMissile:
         for missile in self.missiles:
             for i in range(self.missileLength):
                 x = missile[0]
-                y = missile[1] - (self.cell_size * i)
+                y = missile[1] + (self.cell_size * i)
                 rect = pygame.Rect(x, y, self.cell_size, self.cell_size)
-                pygame.draw.rect(grid, BLUE, rect)
+                pygame.draw.rect(grid, RED, rect)
             continue
     
