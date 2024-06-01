@@ -133,3 +133,36 @@ class Fighter:
                 pygame.draw.rect(grid, RED, rect)
         return
     
+    def checkHit(self, x, y):
+        x = x - self.x
+        if x == 9 * self.cell_size or x == -9 * self.cell_size:
+            if y >= self.y - self.cell_size * 10:
+                return True
+        elif x == 8 * self.cell_size or x == -8 * self.cell_size:
+            if y >= self.y - self.cell_size * 6:
+                return True
+        elif x == 7 * self.cell_size or x == -7 * self.cell_size:
+            if y >= self.y - self.cell_size * 7:
+                return True
+        elif x == 6 * self.cell_size or x == -6 * self.cell_size:
+            if y >= self.y - self.cell_size * 8:
+                return True
+        elif x == 5 * self.cell_size or x == -5 * self.cell_size:
+            if y >= self.y - self.cell_size * 13:
+                return True
+        elif x == 4 * self.cell_size or x == -4 * self.cell_size:
+            if y >= self.y - self.cell_size * 10:
+                return True
+        elif x == 3 * self.cell_size or x == -3 * self.cell_size:
+            if y >= self.y - self.cell_size * 10:
+                return True
+        elif x == 2 * self.cell_size or x == -2 * self.cell_size:
+            if y >= self.y - self.cell_size * 11:
+                return True
+        elif x == 1 * self.cell_size or x == -1 * self.cell_size:
+            if y >= self.y - self.cell_size * 15:
+                return True
+        elif x == 0 * self.cell_size:
+            if y >= self.y - self.cell_size * 19:
+                return True
+        return False

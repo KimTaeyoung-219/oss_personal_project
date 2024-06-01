@@ -1,6 +1,7 @@
 from pygame.locals import *
 import pygame
 from color import *
+import random
 
 class EnemyFighter:
     def __init__(self, x = -1, y = -1, window_height = 640, window_width = 480, cell_size = 3):
@@ -9,6 +10,7 @@ class EnemyFighter:
         self.window_height = window_height
         self.window_width = window_width
         self.fighterLength = 21
+        self.fighterWidth = 9
 
         self.cell_size = cell_size
         if self.x == -1:
@@ -124,4 +126,43 @@ class EnemyFighter:
         return
     
     def moveFighter(self):
+        # needs to be modified
+        for ind, fighter in enumerate(self.fighterList):
+            move = random.choice([0, 1])
+            change_x = fighter[0] + self.cell_size if move == 1 else fighter[0] - self.cell_size
+            y = self.fighterList[ind][1]
+            self.fighterList[ind] = (change_x, y)
         return
+    
+    def checkHit(self, x, y):
+        if x > (self.x + 8 * self.cell_size) or x < (self.x - 8 * self.cell_size):
+            return False
+        x = x - self.x
+        if x == 8 * self.cell_size or x == -8 * self.cell_size:
+            if y <= self.y + self.cell_size * 9:
+                return True
+        elif x == 7 * self.cell_size or x == -7 * self.cell_size:
+            if y <= self.y + self.cell_size * 4:
+                return True
+        elif x == 6 * self.cell_size or x == -6 * self.cell_size:
+            if y <= self.y + self.cell_size * 5:
+                return True
+        elif x == 5 * self.cell_size or x == -5 * self.cell_size:
+            if y <= self.y + self.cell_size * 11:
+                return True
+        elif x == 4 * self.cell_size or x == -4 * self.cell_size:
+            if y <= self.y + self.cell_size * 7:
+                return True
+        elif x == 3 * self.cell_size or x == -3 * self.cell_size:
+            if y <= self.y + self.cell_size * 9:
+                return True
+        elif x == 2 * self.cell_size or x == -2 * self.cell_size:
+            if y <= self.y + self.cell_size * 16:
+                return True
+        elif x == 1 * self.cell_size or x == -1 * self.cell_size:
+            if y <= self.y + self.cell_size * 16:
+                return True
+        elif x == 0 * self.cell_size:
+            if y <= self.y + self.cell_size * 20:
+                return True
+        return False
