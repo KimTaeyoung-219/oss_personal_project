@@ -12,7 +12,7 @@ from color import *
 # decorate Enemyfighter
 
 class TopGun:
-    def __init__ (self, window_height = 640, window_width = 480, cell_size = 10, fps = 20):
+    def __init__ (self, window_height = 640, window_width = 480, cell_size = 3, fps = 20):
         self.window_width = window_width
         self.window_height = window_height
         self.cell_size = cell_size
@@ -21,10 +21,10 @@ class TopGun:
         self.X = self.window_width / self.cell_size
         self.Y = self.window_height / self.cell_size
 
-        fighter_x = self.window_width // 2
-        fighter_y = self.window_height - 20
+        self.fighter_x = self.window_width // 2
+        self.fighter_y = self.window_height - 20
 
-        self.Fighter = Fighter(x = fighter_x, y = fighter_y, window_height = self.window_height, window_width = self.window_width)
+        self.Fighter = Fighter(x = self.fighter_x, y = self.fighter_y, window_height = self.window_height, window_width = self.window_width)
         self.EnemyFighter = EnemyFighter(window_height = self.window_height, window_width = self.window_width)
 
         self.FighterMissile = FighterMissile()
@@ -36,9 +36,25 @@ class TopGun:
         pygame.init()
         self.fps_clock = pygame.time.Clock()
         self.display_grid = pygame.display.set_mode((self.window_width, self.window_height))
+        self.basic_font = pygame.font.Font('freesansbold.ttf', 18)
+        self.bomb_image = pygame.image.load('source/bomb.gif').convert_alpha()
+        self.bomb_size = 100
+        self.bomb_image = pygame.transform.scale(self.bomb_image, (self.bomb_size, self.bomb_size))
         pygame.display.set_caption('Top Gun')
+
+    def init(self):
+        self.Fighter = Fighter(x = self.fighter_x, y = self.fighter_y, window_height = self.window_height, window_width = self.window_width)
+        self.EnemyFighter = EnemyFighter(window_height = self.window_height, window_width = self.window_width)
+
+        self.FighterMissile = FighterMissile()
+        self.EnemyFightersMissile = EnemyFighterMissile()
+
+        self.crashEffect1 = []
+        self.crashEffect2 = []
+        return
     
     def start(self):
+        self.init()
         running = True
         to_x = 0
         index = 0
@@ -67,15 +83,16 @@ class TopGun:
             self.EnemyFightersMissile.fireMissile(self.EnemyFighter, index)
 
             self.checkMissilesHit()
-            self.checkEnemyFighterDead()
-            self.checkFighterDead()
+            if self.checkEnemyFighterDead() is True:
+                return "Win"
+            if self.checkFighterDead() is True:
+                return "Loss"
 
             # draw airplane, opponents and missiles into the Grid
             self.drawComponents()
             self.fps_clock.tick(self.fps)
             index += 1
             # input()
-        return
 
     def drawComponents(self):
         self.display_grid.fill(BGCOLOR)
@@ -117,45 +134,78 @@ class TopGun:
             y = Enemymissile[1] + self.EnemyFightersMissile.cell_size * self.EnemyFightersMissile.missileLength
             flag = self.Fighter.checkHit(Enemymissile[0], y)
             if flag is True:
-                print("DEAD!!")
-        return
+                return True
+        return False
     
     def checkEnemyFighterDead(self):
         for missile in self.FighterMissile.missiles:
             y = missile[1] - self.FighterMissile.cell_size * self.FighterMissile.missileLength
             flag = self.EnemyFighter.checkHit(missile[0], y)
             if flag is True:
-                print("CRASH!!")
-        return
+                return True
+        return False
     
     def drawCrash(self):
-        lineWidth = 5
         for x, y in self.crashEffect1:
-            self.drawImpact(x, y)
+            self.display_grid.blit(self.bomb_image,(x - self.bomb_size / 2, y - self.bomb_size / 2))
         for x, y in self.crashEffect2:
-            self.drawImpact(x, y)
+            self.display_grid.blit(self.bomb_image,(x - self.bomb_size / 2, y - self.bomb_size / 2))
         self.crashEffect2 = self.crashEffect1
         self.crashEffect1 = []
-        return
-    
-    def drawImpact(self, x, y):
-        lineWidth = 5
-        pygame.draw.circle(self.display_grid, WHITE, [x, y], 20, 5)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x + 30, y], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x, y + 30], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x - 30, y], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x, y - 30], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x + 15, y + 26], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x + 15, y - 26], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x - 15, y + 26], lineWidth)
-        pygame.draw.line(self.display_grid, WHITE, [x, y], [x - 15, y - 26], lineWidth)
         return
     
     def end(self):
         pygame.quit()
         sys.exit()
+
+    def gameover(self, res):
+        gameOverFont = pygame.font.Font('freesansbold.ttf', 100)
+        if res == "Win":
+            gameSurf = gameOverFont.render('You', True, WHITE)
+            overSurf = gameOverFont.render('Win!!', True, WHITE)
+        else:
+            gameSurf = gameOverFont.render('Game', True, WHITE)
+            overSurf = gameOverFont.render('Over', True, WHITE)
+        gameRect = gameSurf.get_rect()
+        overRect = overSurf.get_rect()
+        gameRect.midtop = (self.window_width / 2, 10)
+        overRect.midtop = (self.window_width / 2, gameRect.height + 10 + 25)
+
+        self.display_grid.blit(gameSurf, gameRect)
+        self.display_grid.blit(overSurf, overRect)
+        
+        self.drawPressKeyMsg()
+        
+        pygame.display.update()
+        pygame.time.wait(500)
+
+        self.checkForKeyPress() # clear out any key presses in the event queue
+
+        while True:
+            if self.checkForKeyPress():
+                pygame.event.get() # clear event queue
+                return
+                    
+    def checkForKeyPress(self):
+        if len(pygame.event.get(QUIT)) > 0:
+            self.terminate()
+
+        keyUpEvents = pygame.event.get(KEYUP)
+        if len(keyUpEvents) == 0:
+            return None
+        if keyUpEvents[0].key == K_ESCAPE:
+            self.terminate()
+        return keyUpEvents[0].key
+    
+    def drawPressKeyMsg(self):
+        pressKeySurf = self.basic_font.render('Press a key to play.', True, DARKGRAY)
+        pressKeyRect = pressKeySurf.get_rect()
+        pressKeyRect.topleft = (self.window_width - 200, self.window_height - 30)
+        self.display_grid.blit(pressKeySurf, pressKeyRect)
  
 if __name__ == "__main__":
     game = TopGun()
-    game.start()
-    game.end()
+
+    while True:
+        res = game.start()
+        game.gameover(res)

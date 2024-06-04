@@ -1,5 +1,6 @@
 BGCOLOR = (  0,   0,   0)
 DARKGREEN = (  0, 155,   0)
+DARKGRAY  = ( 40,  40,  40)
 RED       = (255,   0,   0)
 WHITE     = (255, 255, 255)
 BLACK     = (  0,   0,   0)
