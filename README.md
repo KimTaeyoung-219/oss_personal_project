@@ -3,6 +3,9 @@
 본 게임에선 본인의 aircraft로 적의 모든 aircraft를 제거하면 승리하게 됩니다
 방향키로 비행기의 위치를 조정 할 수 있고 적의 미사일에 본인의 aircraft가 맞으면 패배하게 됩니다
 
+## Reference
+[1] https://github.com/pygame/pygame "pygame"
+
 ## 지원 Operating Systems
 |OS| 지원 여부 |
 |-----|--------|
