@@ -6,16 +6,16 @@
 ## 지원 Operating Systems
 |OS| 지원 여부 |
 |-----|--------|
-|windows | :x:  |
+|Windows | :x:  |
 |MacOS  | :o:  |
 
 ## 실행 방법
-## Mac
+### Mac
 
 1. python 3.12.2를 설치한다
 2. pygame 2.5.2를 설치한다
 ```
-pip3 install pygame=2.5.2
+pip3 install pygame==2.5.2
 git clone https://github.com/RmKuma/oss_personal_project_phase1.git
 cd oss_personal_project_phase1
 python3 main.py
@@ -34,4 +34,4 @@ python3 main.py
 
 #### class EnemyFighterMissile, FighterMissile
 - Description: 아군과 적군이 쏜 미사일을 관리하는 클래스
-- Function: 아군과 적군이 쏜 미사일의 위치를 판단하고 관리
+- Function: 아군과 적군이 쏜 미사일의 위치와 이동궤적을 판단하고 관리

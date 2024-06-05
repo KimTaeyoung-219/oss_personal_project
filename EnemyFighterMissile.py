@@ -17,7 +17,9 @@ class EnemyFighterMissile:
         return
     
     def fireMissile(self, fighters: EnemyFighter, index):
-        for fighter in fighters.fighterList:
+        for ind, fighter in enumerate(fighters.fighterList):
+            if fighters.fighterListStatus[ind] == 'DEAD':
+                continue
             if index % self.fireMissilePerIndex == 0:
                 x = fighter[0]
                 y = fighter[1] + fighters.fighterLength * self.cell_size

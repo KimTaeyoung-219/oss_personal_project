@@ -19,12 +19,16 @@ class EnemyFighter:
             self.y = 10
 
         self.fighterList = []
+        self.fighterListStatus = []
+        self.generateFighter()
         return
     
     def drawComponent(self, grid):
-        for fighter in self.fighterList:
+        for ind, fighter in enumerate(self.fighterList):
             x = fighter[0]
             y = fighter[1]
+            if self.fighterListStatus[ind] == 'DEAD':
+                continue
             for i in range(20):
                 diff = i * self.cell_size
                 diff_x = self.cell_size * 0
@@ -119,50 +123,96 @@ class EnemyFighter:
         return
     
     def generateFighter(self):
-        if len(self.fighterList) == 0:
-            coord = (self.x, self.y)
-            self.fighterList.append(coord)
-            return
+        
+        coord = (self.x - self.cell_size * 12, self.y)
+        self.fighterList.append(coord)
+        self.fighterListStatus.append('left')
+
+        coord = (self.x + self.cell_size * 12, self.y + self.cell_size * 7)
+        self.fighterList.append(coord)
+        self.fighterListStatus.append('right')
+    
         return
     
     def moveFighter(self):
         # needs to be modified
         for ind, fighter in enumerate(self.fighterList):
-            move = random.choice([0, 1])
-            change_x = fighter[0] + self.cell_size if move == 1 else fighter[0] - self.cell_size
+            move = random.choices([0, 1], weights=[0.2, 0.8])
+            if self.fighterListStatus[ind] == 'DEAD':
+                continue
+            if move[0] == 0: # change direction
+                if self.fighterListStatus[ind] == 'left' and self.fighterList[ind][0] < self.window_width:
+                    self.fighterListStatus[ind] = 'right'
+                elif self.fighterListStatus[ind] == 'right' and self.fighterList[ind][0] >= 0:
+                    self.fighterListStatus[ind] = 'left'
+            else: # maintain direction
+                if self.fighterListStatus[ind] == 'left' and self.fighterList[ind][0] <= 0:
+                    self.fighterListStatus[ind] = 'right'
+                elif self.fighterListStatus[ind] == 'right' and self.fighterList[ind][0] >= self.window_width:
+                    self.fighterListStatus[ind] = 'left'
+
+            change_x = fighter[0] + self.cell_size if self.fighterListStatus[ind] == 'right' else fighter[0] - self.cell_size
             y = self.fighterList[ind][1]
             self.fighterList[ind] = (change_x, y)
         return
     
-    def checkHit(self, x, y):
-        if x > (self.x + 8 * self.cell_size) or x < (self.x - 8 * self.cell_size):
-            return False
-        x = x - self.x
-        if x == 8 * self.cell_size or x == -8 * self.cell_size:
-            if y <= self.y + self.cell_size * 9:
-                return True
-        elif x == 7 * self.cell_size or x == -7 * self.cell_size:
-            if y <= self.y + self.cell_size * 4:
-                return True
-        elif x == 6 * self.cell_size or x == -6 * self.cell_size:
-            if y <= self.y + self.cell_size * 5:
-                return True
-        elif x == 5 * self.cell_size or x == -5 * self.cell_size:
-            if y <= self.y + self.cell_size * 11:
-                return True
-        elif x == 4 * self.cell_size or x == -4 * self.cell_size:
-            if y <= self.y + self.cell_size * 7:
-                return True
-        elif x == 3 * self.cell_size or x == -3 * self.cell_size:
-            if y <= self.y + self.cell_size * 9:
-                return True
-        elif x == 2 * self.cell_size or x == -2 * self.cell_size:
-            if y <= self.y + self.cell_size * 16:
-                return True
-        elif x == 1 * self.cell_size or x == -1 * self.cell_size:
-            if y <= self.y + self.cell_size * 16:
-                return True
-        elif x == 0 * self.cell_size:
-            if y <= self.y + self.cell_size * 20:
-                return True
-        return False
+    def checkHit(self, x, y, topgun):
+        for ind, fighter in enumerate(self.fighterList):
+            fx = fighter[0]
+            fy = fighter[1]
+            if self.fighterListStatus[ind] == 'DEAD':
+                continue
+
+            if x > (fx + 8 * self.cell_size) or x < (fx - 8 * self.cell_size):
+                continue
+            x = x - fx
+            if x == 8 * self.cell_size or x == -8 * self.cell_size:
+                if y <= fy + self.cell_size * 9:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 7 * self.cell_size or x == -7 * self.cell_size:
+                if y <= fy + self.cell_size * 4:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 6 * self.cell_size or x == -6 * self.cell_size:
+                if y <= fy + self.cell_size * 5:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 5 * self.cell_size or x == -5 * self.cell_size:
+                if y <= fy + self.cell_size * 11:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 4 * self.cell_size or x == -4 * self.cell_size:
+                if y <= fy + self.cell_size * 7:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 3 * self.cell_size or x == -3 * self.cell_size:
+                if y <= fy + self.cell_size * 9:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 2 * self.cell_size or x == -2 * self.cell_size:
+                if y <= fy + self.cell_size * 16:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 1 * self.cell_size or x == -1 * self.cell_size:
+                if y <= fy + self.cell_size * 16:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            elif x == 0 * self.cell_size:
+                if y <= fy + self.cell_size * 20:
+                    self.fighterListStatus[ind] = 'DEAD'
+                    topgun.crashEffect1.append((fx, fy))
+                    continue
+            
+        for fighter in self.fighterListStatus:
+            if fighter != 'DEAD':
+                return False
+        return True

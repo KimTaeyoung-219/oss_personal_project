@@ -6,11 +6,6 @@ from FighterMissile import FighterMissile
 from EnemyFighterMissile import EnemyFighterMissile
 from color import *
 
-# draw crash, move Enemyfighter when range is outerbound
-# set sound effect
-# set when fighter get crashed
-# decorate Enemyfighter
-
 class TopGun:
     def __init__ (self, window_height = 640, window_width = 480, cell_size = 3, fps = 20):
         self.window_width = window_width
@@ -41,6 +36,8 @@ class TopGun:
         self.bomb_size = 100
         self.bomb_image = pygame.transform.scale(self.bomb_image, (self.bomb_size, self.bomb_size))
         pygame.display.set_caption('Top Gun')
+
+        self.firstIntro()
 
     def init(self):
         self.Fighter = Fighter(x = self.fighter_x, y = self.fighter_y, window_height = self.window_height, window_width = self.window_width)
@@ -78,9 +75,11 @@ class TopGun:
             self.FighterMissile.fireMissile(self.Fighter, index)
 
             self.EnemyFighter.moveFighter()
-            self.EnemyFighter.generateFighter()
             self.EnemyFightersMissile.flyMissile()
             self.EnemyFightersMissile.fireMissile(self.EnemyFighter, index)
+
+            # draw airplane, opponents and missiles into the Grid
+            self.drawComponents()
 
             self.checkMissilesHit()
             if self.checkEnemyFighterDead() is True:
@@ -88,8 +87,8 @@ class TopGun:
             if self.checkFighterDead() is True:
                 return "Loss"
 
-            # draw airplane, opponents and missiles into the Grid
-            self.drawComponents()
+            # # draw airplane, opponents and missiles into the Grid
+            # self.drawComponents()
             self.fps_clock.tick(self.fps)
             index += 1
             # input()
@@ -102,6 +101,11 @@ class TopGun:
         self.EnemyFightersMissile.drawComponent(self.display_grid)
         self.drawCrash()
         pygame.display.update()
+
+    def firstIntro(self):
+        self.display_grid.fill(BGCOLOR)
+        self.Fighter.drawComponent(self.display_grid)
+        self.gameover('First')
 
     def checkMissilesHit(self):
         filter = []
@@ -140,7 +144,7 @@ class TopGun:
     def checkEnemyFighterDead(self):
         for missile in self.FighterMissile.missiles:
             y = missile[1] - self.FighterMissile.cell_size * self.FighterMissile.missileLength
-            flag = self.EnemyFighter.checkHit(missile[0], y)
+            flag = self.EnemyFighter.checkHit(missile[0], y, self)
             if flag is True:
                 return True
         return False
@@ -163,9 +167,12 @@ class TopGun:
         if res == "Win":
             gameSurf = gameOverFont.render('You', True, WHITE)
             overSurf = gameOverFont.render('Win!!', True, WHITE)
-        else:
+        elif res == 'Loss':
             gameSurf = gameOverFont.render('Game', True, WHITE)
             overSurf = gameOverFont.render('Over', True, WHITE)
+        elif res == 'First':
+            gameSurf = gameOverFont.render('Top', True, WHITE)
+            overSurf = gameOverFont.render('Gun', True, WHITE)
         gameRect = gameSurf.get_rect()
         overRect = overSurf.get_rect()
         gameRect.midtop = (self.window_width / 2, 10)
