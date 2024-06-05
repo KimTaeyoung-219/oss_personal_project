@@ -22,6 +22,8 @@ python3 main.py
 ```
 
 ## 실행 예시
+![Screen Recording 2024-06-05 at 1 36 37 PM](https://github.com/KimTaeyoung-219/oss_personal_project/assets/65494946/320e7f3c-1d3a-4486-ad49-8a4f21379a7d)
+
 
 ## 코드 설명
 #### class TopGun
