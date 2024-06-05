@@ -22,8 +22,8 @@ class TopGun:
         self.Fighter = Fighter(x = self.fighter_x, y = self.fighter_y, window_height = self.window_height, window_width = self.window_width)
         self.EnemyFighter = EnemyFighter(window_height = self.window_height, window_width = self.window_width)
 
-        self.FighterMissile = FighterMissile()
-        self.EnemyFightersMissile = EnemyFighterMissile()
+        self.FighterMissile = FighterMissile(cell_size = self.cell_size, window_height = self.window_height, window_width = self.window_width)
+        self.EnemyFightersMissile = EnemyFighterMissile(cell_size = self.cell_size, window_height = self.window_height, window_width = self.window_width)
 
         self.crashEffect1 = []
         self.crashEffect2 = []
@@ -43,8 +43,8 @@ class TopGun:
         self.Fighter = Fighter(x = self.fighter_x, y = self.fighter_y, window_height = self.window_height, window_width = self.window_width)
         self.EnemyFighter = EnemyFighter(window_height = self.window_height, window_width = self.window_width)
 
-        self.FighterMissile = FighterMissile()
-        self.EnemyFightersMissile = EnemyFighterMissile()
+        self.FighterMissile = FighterMissile(cell_size = self.cell_size, window_height = self.window_height, window_width = self.window_width)
+        self.EnemyFightersMissile = EnemyFighterMissile(cell_size = self.cell_size, window_height = self.window_height, window_width = self.window_width)
 
         self.crashEffect1 = []
         self.crashEffect2 = []
