@@ -25,7 +25,7 @@ python3 main.py
 ```
 
 ## 실행 예시
-![Screen Recording 2024-06-05 at 1 36 37 PM](https://github.com/KimTaeyoung-219/oss_personal_project/assets/65494946/320e7f3c-1d3a-4486-ad49-8a4f21379a7d)
+![thumbnail2](https://github.com/KimTaeyoung-219/oss_personal_project/assets/65494946/0e9c2f90-6544-4b90-a9a0-8631799bedaf)
 
 
 ## 코드 설명
