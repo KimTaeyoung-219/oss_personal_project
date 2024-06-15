@@ -16,7 +16,7 @@ class Fighter:
         if self.y == -1:
             self.y = self.window_height - 10
         return
-    
+    '''
     def setDirection(self, event):
         if event == K_RIGHT:
             if self.x < self.window_width - self.cell_size:
@@ -24,14 +24,29 @@ class Fighter:
         elif event == K_LEFT:
             if self.x > self.cell_size:
                 self.x -= self.cell_size
-        # print(f"x: {self.x}, y: {self.y}")
-    
-    def setDirection2(self, to_x):
+        #Add func to move up && down
+        elif event == K_UP:
+            if self.y > self.cell_size:
+                self.y -= self.cell_size
+        elif event == K_DOWN:
+            if self.y < self.window_height - self.cell_size:
+                self.y += self.cell_size 
+            # print(f"x: {self.x}, y: {self.y}")
+    '''
+    def setDirection2(self, to_x, to_y):
         self.x += to_x * self.cell_size * 2
+        self.y += to_y * self.cell_size * 2
+
         if self.x < 0:
             self.x = 0
         elif self.x > self.window_width:
             self.x = self.window_width
+        #Add func to move up && down
+        if self.y < 0:
+            self.y = 0
+        elif self.y > self.window_height:
+            self.y = self.window_height
+
     
     def drawComponent(self, grid):
         for i in range(19):

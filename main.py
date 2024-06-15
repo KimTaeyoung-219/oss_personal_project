@@ -54,6 +54,7 @@ class TopGun:
         self.init()
         running = True
         to_x = 0
+        to_y = 0
         index = 0
         while running:
             for event in pygame.event.get():
@@ -64,12 +65,20 @@ class TopGun:
                         to_x = 1
                     elif event.key == pygame.K_LEFT:
                         to_x = -1
+                    elif event.key == pygame.K_UP:
+                        to_y = -1
+                    elif event.key == pygame.K_DOWN:
+                        to_y = 1
                 if event.type == pygame.KEYUP:
                     if event.key == pygame.K_RIGHT:
                         to_x = 0
                     elif event.key == pygame.K_LEFT:
                         to_x = 0
-            self.Fighter.setDirection2(to_x)
+                    elif event.key == pygame.K_UP:
+                        to_y = 0
+                    elif event.key == pygame.K_DOWN:
+                        to_y = 0
+            self.Fighter.setDirection2(to_x, to_y)
 
             self.FighterMissile.flyMissile()
             self.FighterMissile.fireMissile(self.Fighter, index)
@@ -212,6 +221,7 @@ class TopGun:
  
 if __name__ == "__main__":
     game = TopGun()
+    #game = TopGun( 640, 480, 3, 60)
 
     while True:
         res = game.start()
