@@ -12,6 +12,7 @@ class TopGun:
         self.window_height = window_height
         self.cell_size = cell_size
         self.fps = fps
+    
 
         self.X = self.window_width / self.cell_size
         self.Y = self.window_height / self.cell_size
@@ -37,6 +38,22 @@ class TopGun:
         self.bomb_image = pygame.transform.scale(self.bomb_image, (self.bomb_size, self.bomb_size))
         pygame.display.set_caption('Top Gun')
 
+        
+        ###Phase2##########    
+        self.setIcon_image = pygame.image.load('source/setIcon.png')
+        self.setIcon_width = 40
+        self.setIcon_height = 40
+        self.setIcon_image = pygame.transform.scale(self.setIcon_image, (self.setIcon_width, self.setIcon_height))
+        self.setIcon_x = self.window_width - self.setIcon_width - 10
+        self.setIcon_y = 10
+        
+        self.pause = False
+        self.pause_texts = [
+            ("Resume Game", (self.window_width // 2, 200))
+        ]
+        self.pause_text_rects = []
+        ###Phase2##########    
+
         self.firstIntro()
 
     def init(self):
@@ -60,6 +77,21 @@ class TopGun:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
                     running = False 
+                ###Phase2##########    
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1: #mouse left click 
+                        mouse_x, mouse_y = pygame.mouse.get_pos()
+                        
+                        if self.pause:
+                            self.handle_pause_click(mouse_x, mouse_y)
+                        else:
+                            setIcon_rect = self.setIcon_image.get_rect(topleft=(self.setIcon_x, self.setIcon_y))
+                            if setIcon_rect.collidepoint(mouse_x, mouse_y):
+                                self.pause = not self.pause
+                                if self.pause:
+                                    #On setting page
+                                    self.showSetting()
+                ###Phase2##########    
                 if event.type == pygame.KEYDOWN: 
                     if event.key == pygame.K_RIGHT:
                         to_x = 1
@@ -78,6 +110,10 @@ class TopGun:
                         to_y = 0
                     elif event.key == pygame.K_DOWN:
                         to_y = 0
+            ###Phase2##########    
+            if self.pause:
+                    continue
+            ###Phase2##########    
             self.Fighter.setDirection2(to_x, to_y)
 
             self.FighterMissile.flyMissile()
@@ -101,13 +137,41 @@ class TopGun:
             self.fps_clock.tick(self.fps)
             index += 1
             # input()
+    ###Phase2##########    
+    def showSetting(self):
+        self.display_grid.fill((0,0,0))
 
+        self.pause_text_rects = []
+        font = pygame.font.Font(None, 36)
+        for text, pos in self.pause_texts:
+            text_surface = font.render(text, True, (255, 255, 255))
+            text_rect = text_surface.get_rect(center=pos)
+            self.pause_text_rects.append(text_rect)
+            self.display_grid.blit(text_surface, text_rect)
+        pygame.display.flip()
+
+
+    def handle_pause_click(self, mouse_x, mouse_y):
+        for index, rect in enumerate(self.pause_text_rects):
+            if rect.collidepoint(mouse_x, mouse_y):
+                self.perform_pause_action(index)
+
+    def perform_pause_action(self, index):
+        if index == 0:  # Resume Game
+            self.pause = False
+            print("Resume Game...")
+    ###Phase2########## 
+     
+       
     def drawComponents(self):
         self.display_grid.fill(BGCOLOR)
         self.Fighter.drawComponent(self.display_grid)
         self.FighterMissile.drawComponent(self.display_grid)
         self.EnemyFighter.drawComponent(self.display_grid)
         self.EnemyFightersMissile.drawComponent(self.display_grid)
+        ###Phase2##########    
+        self.display_grid.blit(self.setIcon_image, (self.setIcon_x, self.setIcon_y))
+        ###Phase2##########    
         self.drawCrash()
         pygame.display.update()
 
