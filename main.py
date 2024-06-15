@@ -49,9 +49,17 @@ class TopGun:
         
         self.pause = False
         self.pause_texts = [
-            ("Resume Game", (self.window_width // 2, 200))
+            ("Resume Game", (self.window_width // 2, 200)),
+            ("Speed Change", (self.window_width // 2, 400))
         ]
         self.pause_text_rects = []
+
+        self.speedStting = False
+        self.speed_test = [
+                ("slow", (self.window_width // 2, 200)),
+                ("fast", (self.window_width // 2, 400))
+            ]
+        self.speed_text_rects = []
         ###Phase2##########    
 
         self.firstIntro()
@@ -73,6 +81,8 @@ class TopGun:
         to_x = 0
         to_y = 0
         index = 0
+        self.fps = 20
+
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT: 
@@ -83,7 +93,10 @@ class TopGun:
                         mouse_x, mouse_y = pygame.mouse.get_pos()
                         
                         if self.pause:
-                            self.handle_pause_click(mouse_x, mouse_y)
+                            if self.speedStting:
+                                self.handle_speed_click(mouse_x, mouse_y)
+                            else:
+                                self.handle_pause_click(mouse_x, mouse_y)
                         else:
                             setIcon_rect = self.setIcon_image.get_rect(topleft=(self.setIcon_x, self.setIcon_y))
                             if setIcon_rect.collidepoint(mouse_x, mouse_y):
@@ -160,6 +173,32 @@ class TopGun:
         if index == 0:  # Resume Game
             self.pause = False
             print("Resume Game...")
+        elif index == 1:  # Speed Change
+            #self.fps = 40
+            self.speedStting = True
+
+            ###Speed Change page
+            self.display_grid.fill((0,0,0))
+            font = pygame.font.Font(None, 36)
+            for text, pos in self.speed_test:
+                text_surface = font.render(text, True, (255, 255, 255))
+                text_rect = text_surface.get_rect(center=pos)
+                self.speed_text_rects.append(text_rect)
+                self.display_grid.blit(text_surface, text_rect)
+            pygame.display.flip()
+
+    def handle_speed_click(self, mouse_x, mouse_y):
+        for index, rect in enumerate(self.speed_text_rects):
+            if rect.collidepoint(mouse_x, mouse_y):
+                if index==0:
+                    print("slow")
+                    if self.fps >= 20:
+                        self.fps -= 10
+                elif index==1:
+                    print("fast")
+                    self.fps += 10
+        self.speedStting = False
+        self.showSetting()
     ###Phase2########## 
      
        
