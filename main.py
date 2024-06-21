@@ -13,6 +13,7 @@ class TopGun:
         self.cell_size = cell_size
         self.fps = fps
     
+        self.stage = 0
 
         self.X = self.window_width / self.cell_size
         self.Y = self.window_height / self.cell_size
@@ -82,6 +83,8 @@ class TopGun:
         to_y = 0
         index = 0
         self.fps = 20
+        self.stage = self.stage % 3
+        self.EnemyFighter.addFighter(self.stage)
 
         while running:
             for event in pygame.event.get():
@@ -141,7 +144,11 @@ class TopGun:
 
             self.checkMissilesHit()
             if self.checkEnemyFighterDead() is True:
-                return "Win"
+                if(self.stage < 3):
+                    self.stage += 1
+                    return "Next"
+                else:
+                    return "Win"
             if self.checkFighterDead() is True:
                 return "Loss"
 
@@ -285,6 +292,11 @@ class TopGun:
         elif res == 'First':
             gameSurf = gameOverFont.render('Top', True, WHITE)
             overSurf = gameOverFont.render('Gun', True, WHITE)
+        elif res == 'Next':
+            stage_number = self.stage 
+            gameSurf = gameOverFont.render('Clear', True, WHITE)
+            overSurf = gameOverFont.render(f'Stage {stage_number}', True, WHITE)
+            
         gameRect = gameSurf.get_rect()
         overRect = overSurf.get_rect()
         gameRect.midtop = (self.window_width / 2, 10)

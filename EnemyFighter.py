@@ -216,3 +216,16 @@ class EnemyFighter:
             if fighter != 'DEAD':
                 return False
         return True
+
+    def addFighter(self, num):
+        for i in range(num):
+            if i%2 == 0:
+                coord = (self.x - self.cell_size * 12, self.y)
+                self.fighterList.append(coord)
+                self.fighterListStatus.append('left')
+            elif i%2 == 1:
+                coord = (self.x + self.cell_size * 12, self.y + self.cell_size * 7)
+                self.fighterList.append(coord)
+                self.fighterListStatus.append('right')
+
+        
