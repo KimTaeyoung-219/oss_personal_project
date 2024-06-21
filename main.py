@@ -144,12 +144,14 @@ class TopGun:
 
             self.checkMissilesHit()
             if self.checkEnemyFighterDead() is True:
-                if(self.stage < 3):
+                if(self.stage < 2):
                     self.stage += 1
                     return "Next"
                 else:
+                    self.stage = 0
                     return "Win"
             if self.checkFighterDead() is True:
+                self.stage = 0
                 return "Loss"
 
             # # draw airplane, opponents and missiles into the Grid
